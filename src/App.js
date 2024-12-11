@@ -22,16 +22,16 @@ const App = () => {
     // fetch Pokémon data from the API
     const fetchAllPokemon = async () => {
       try {
-        
+        // Fetch the list of the first 151 Pokémon
         const fetchData = await fetch(API);
 
         // convert response into JSON so we can manipulate the data
         const json = await fetchData.json();
 
-       /* json.results contains basic pokemon info with URLs for details.
+        /* json.results contains basic pokemon info with URLs for details.
           map over each item to fetch detailed data from poke.url.
           return the detailed data in JSON format. */
-          const detailedPokemonPromises = json.results.map(async (poke) => {
+        const detailedPokemonPromises = json.results.map(async (poke) => {
           const res = await fetch(poke.url); // Fetch detailed data for each Pokémon
           return res.json(); // Convert detailed data into JSON format
         });
@@ -45,7 +45,7 @@ const App = () => {
       } catch (err) {
         // If there's an error during fetching, show a message in the error state
         console.error(err);
-        setError('Failed to fetch Pokemon data.');
+        setError('Failed to fetch Pokémon data from the API.');
       }
     };
 
@@ -55,17 +55,16 @@ const App = () => {
 
   // function to handle changes in the search input field
   const handleSearchChange = (e) => {
-    // get the current value of the input field, converted to lowercase(in case user types in caps)
+    // get the current value of the input field, converted to lowercase (in case user types in caps)
     const search = e.target.value.toLowerCase();
     setSearchTerm(search); // update the searchTerm state with the new input value
 
     // filter the list of pokemon based on the search term
     const filtered = allPokemon.filter((pokemon) => {
-      
-      //if the search term matches the pokemon's ID
+      // if the search term matches the pokemon's ID
       const idMatch = pokemon.id.toString().includes(search);
 
-      //if the search term matches the pokemon's name
+      // if the search term matches the pokemon's name
       const nameMatch = pokemon.name.toLowerCase().includes(search);
 
       // if the search term matches any of the pokemon's types
@@ -73,13 +72,8 @@ const App = () => {
         typeObj.type.name.toLowerCase().includes(search)
       );
 
-      // if the search term matches any of the pokemons stats
-      const statMatch = pokemon.stats.some((statObj) =>
-        statObj.stat.name.toLowerCase().includes(search)
-      );
-
-      // return true if the search term matches ID, name, type, or stats
-      return idMatch || nameMatch || typeMatch || statMatch;
+      // return true if the search term matches ID, name, or type
+      return idMatch || nameMatch || typeMatch;
     });
 
     // update the filteredPokemon state with the filtered list
@@ -94,7 +88,7 @@ const App = () => {
           type="text" // text input field
           value={searchTerm} // Bind the input field to the searchTerm state
           onChange={handleSearchChange} // Call handleSearchChange when the input changes
-          placeholder="Search by ID, name, type, or stat" // Placeholder text for the input field
+          placeholder="Search by ID, name, or type" // Placeholder text for the input field
         />
       </form>
 
