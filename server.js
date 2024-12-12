@@ -17,13 +17,13 @@ const db = new sqlite3.Database('./pokemon.db', (err) => {
   }
 });
 
-// Endpoint to search Pokémon by ID, name, or type
+// Endpoint to search Pokemon by ID, name, or type
 app.get('/pokemon', (req, res) => {
   const { search } = req.query;
 
   console.log(`Search query received: "${search}"`);
 
-  // Query to search for Pokémon by name, ID, or type
+  // Query to search for Pokemon by name, ID, or type
   const query = `
     SELECT pokemon_info.id, pokemon_info.name, GROUP_CONCAT(pokemon_types.type) AS types
     FROM pokemon_info

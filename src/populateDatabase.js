@@ -1,22 +1,22 @@
 import './App.css';
 // Import React hooks: useState (to manage state) and useEffect (to run code at specific times)
 import { useState, useEffect } from 'react';
-// Import the Pokemon component, which will display individual Pokémon details
+// Import the Pokemon component, which will display individual Pokemon details
 import Pokemon from './components/Pokemon.js';
 
 const App = () => {
-  // URL for the local server that provides Pokémon data
+  // URL for the local server that provides Pokemon data
   const API = 'http://localhost:3001/pokemon';
-  // stores all Pokémon data (empty list initially)
+  // stores all Pokemon data (empty list initially)
   const [allPokemon, setAllPokemon] = useState([]);
-  // stores the filtered list of Pokémon
+  // stores the filtered list of Pokemon
   const [filteredPokemon, setFilteredPokemon] = useState([]);
   // stores the user's search input (empty string initially)
   const [searchTerm, setSearchTerm] = useState('');
   // stores any errors 
   const [error, setError] = useState(null);
 
-  // Function to fetch Pokémon data from the local server
+  // Function to fetch Pokemon data from the local server
   const fetchLocalPokemon = async (search = '') => {
     try {
       /* Fetch data from the local Express server.
@@ -30,13 +30,13 @@ const App = () => {
     } catch (err) {
       // If there's an error during fetching, update the error state
       console.error('Error fetching data from server:', err.message);
-      setError('Failed to fetch Pokémon data from the database.');
+      setError('Failed to fetch Pokemon data from the database.');
     }
   };
 
-  // useEffect to automatically load Pokémon data when the component first loads
+  // useEffect to automatically load Pokemon data when the component first loads
   useEffect(() => {
-    fetchLocalPokemon(); // Fetch all Pokémon data initially (empty search)
+    fetchLocalPokemon(); // Fetch all Pokemon data initially (empty search)
   }, []); // Empty dependency array means this runs only once when the component loads
 
   // Function to handle changes in the search input field
@@ -45,7 +45,7 @@ const App = () => {
     const search = e.target.value.toLowerCase();
     setSearchTerm(search); // update the searchTerm state with the new input value
 
-    // Fetch updated Pokémon data from the server based on the current search term
+    // Fetch updated Pokemon data from the server based on the current search term
     fetchLocalPokemon(search);
   };
 
@@ -64,14 +64,14 @@ const App = () => {
       {/* If there's an error, show the error message */}
       {error && <div>{error}</div>}
 
-      {/* Display the filtered list of Pokémon */}
+      {/* Display the filtered list of Pokemon */}
       <div>
-        {filteredPokemon.length > 0 ? ( // Check if there are any Pokémon in the filtered list
-          filteredPokemon.map((pokemon) => ( // Map over each Pokémon and render a Pokemon component
-            <Pokemon key={pokemon.id} pokemon={pokemon} /> // Pass each Pokémon's data as props to Pokemon
+        {filteredPokemon.length > 0 ? ( // Check if there are any Pokemon in the filtered list
+          filteredPokemon.map((pokemon) => ( // Map over each Pokemon and render a Pokemon component
+            <Pokemon key={pokemon.id} pokemon={pokemon} /> // Pass each Pokemon's data as props to Pokemon
           ))
         ) : (
-          <div>Who's that Pokémon?!</div> // Show this message if no Pokémon match the search
+          <div>Who's that Pokemon?!</div> // Show this message if no Pokemon match the search
         )}
       </div>
     </div>

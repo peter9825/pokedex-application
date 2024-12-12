@@ -1,38 +1,56 @@
-.App {
+body {
+  background-color: #ED2939 !important; 
+}
+
+
+.logo-container{
   text-align: center;
+  padding-top: 2rem;
+  
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.pokemon-logo{
+  max-width: 100%;
+  height: auto;
+  width: 300px;
+  margin-bottom: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.slogan {
+  font-family: 'Press Start 2P', sans-serif; 
+  font-size: 0.7rem; 
+  margin-top: 0; 
+  color: white; 
+  
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+
+/* container for pokemon cards, (pokemon now display in rows) */
+.pokemon-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 20px; 
+  padding: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+/*pokemon card styling */
+.pokemon-container > div {
+  border: 5px solid #FFBF00;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+/*box shadow effect*/
+.pokemon-container > div:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+img {
+  max-width: 100px;
+  height: auto;
+  margin-bottom: 10px;
 }
