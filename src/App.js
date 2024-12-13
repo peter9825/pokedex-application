@@ -27,7 +27,7 @@ const App = () => {
     // fetch Pokemon data from the API
     const fetchAllPokemon = async () => {
       try {
-        // fetch the list of the first 151 Pokémon
+        // fetch the list of the first 151 Pokemon
         const fetchData = await fetch(API);
 
         // convert response into JSON so we can manipulate the data
