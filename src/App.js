@@ -59,30 +59,36 @@ const App = () => {
 
   // function to handle changes in the search input field
   const handleSearchChange = (e) => {
-    // get the current value of the input field, converted to lowercase (in case user types in caps)
+    // Get the current value of the input field, converted to lowercase (in case user types in caps)
     const search = e.target.value.toLowerCase();
-    setSearchTerm(search); // update the searchTerm state with the new input value
-
-    // filter the list of Pokemon based on the search term
+    setSearchTerm(search); // Update the searchTerm state with the new input value
+  
+    // Filter the list of Pokemon based on the search term
     const filtered = allPokemon.filter((pokemon) => {
-      // if the search term matches the pokemon's ID
+      // If the search term matches the Pokemon's ID
       const idMatch = pokemon.id.toString().includes(search);
-
-      // if the search term matches the Pokemon's name
+  
+      // If the search term matches the Pokemon's name
       const nameMatch = pokemon.name.toLowerCase().includes(search);
-
-      // if the search term matches any of the Pokemon's types
+  
+      // If the search term matches any of the Pokemon's types
       const typeMatch = pokemon.types.some((typeObj) =>
         typeObj.type.name.toLowerCase().includes(search)
       );
-
-      // return true if the search term matches ID, name, or type
-      return idMatch || nameMatch || typeMatch;
+  
+      // If the search term matches any of the Pokemon's abilities
+      const abilityMatch = pokemon.abilities.some((abilityObj) =>
+        abilityObj.ability.name.toLowerCase().includes(search)
+      );
+  
+      // Return true if the search term matches ID, name, type, or ability
+      return idMatch || nameMatch || typeMatch || abilityMatch;
     });
-
-    // update the filteredPokemon state with the filtered list
+  
+    // Update the filteredPokemon state with the filtered list
     setFilteredPokemon(filtered);
   };
+  
 
   return (
     <>
@@ -100,7 +106,7 @@ const App = () => {
             type="text"
             value={searchTerm}
             onChange={handleSearchChange}
-            placeholder="Search by ID, name, or type"
+            placeholder="Search by ID, name, type, or ability"
             className="form-control w-50"
           />
         </form>

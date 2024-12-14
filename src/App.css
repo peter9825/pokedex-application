@@ -2,14 +2,12 @@ body {
   background-color: #ED2939 !important; 
 }
 
-
-.logo-container{
+.logo-container {
   text-align: center;
   padding-top: 2rem;
-  
 }
 
-.pokemon-logo{
+.pokemon-logo {
   max-width: 100%;
   height: auto;
   width: 300px;
@@ -21,36 +19,55 @@ body {
   font-size: 0.7rem; 
   margin-top: 0; 
   color: white; 
-  
 }
 
-
-/* container for pokemon cards, (pokemon now display in rows) */
+/* Container for Pokemon cards, ensuring they display in rows */
 .pokemon-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-  gap: 20px; 
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
   padding: 20px;
 }
 
-/*pokemon card styling */
+/* Pokemon card styling */
 .pokemon-container > div {
-  border: 5px solid #FFBF00;
+  border: 5px solid #FFBF00 !important; /* Force yellow border */
   border-radius: 10px;
   padding: 15px;
   text-align: center;
-  background-color: #f9f9f9;
+  background-color: #f9f9f9; /* Light background */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  justify-content: center; /* Center content vertically */
+  min-height: 250px; /* Ensures cards have enough height */
 }
-/*box shadow effect*/
+
+/* Hover effect for Pokemon cards */
 .pokemon-container > div:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
-img {
-  max-width: 100px;
-  height: auto;
+/* Pokemon sprite styling */
+.pokemon-container img {
+  width: 100px; /* Fixed width for images */
+  height: 100px; /* Fixed height for images */
+  object-fit: contain; /* Ensures the sprite does not distort */
   margin-bottom: 10px;
+}
+
+/* Text adjustments for clean appearance */
+.pokemon-container h2 {
+  margin: 10px 0 5px;
+  font-size: 1.2rem;
+  text-transform: capitalize;
+  color: black; /* Ensures text is visible */
+}
+
+.pokemon-container p {
+  margin: 5px 0;
+  font-size: 0.9rem;
 }
