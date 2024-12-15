@@ -1,7 +1,4 @@
-
-// Import React hooks: useState (to manage state) and useEffect (to run code at specific times)
-import { useState, useEffect } from 'react';
-// Import the Pokemon component, which will display individual Pokemon details
+import React, { useState, useEffect } from 'react';
 import Pokemon from './components/Pokemon.js';
 import pokemonLogo from './assets/pokemon_logo.png';
 import unknownPokemon from './assets/unkown_pokemon.png';
@@ -10,133 +7,111 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const App = () => {
-  // URL for the API that provides pokemon data (limits to the first 151 pokemon)
-  const API = 'https://pokeapi.co/api/v2/pokemon?limit=151';
-  // stores all Pokemon data (empty list initially)
-  const [allPokemon, setAllPokemon] = useState([]);
-  // stores the filtered list of Pokemon
-  const [filteredPokemon, setFilteredPokemon] = useState([]);
-  // stores the user's search input (empty string initially)
+
+  /*Using the following States*/ 
+
+  // hold the search term input by the user
   const [searchTerm, setSearchTerm] = useState('');
+  // hold the full list of Pokemon fetched from the server
+  const [pokemonList, setPokemonList] = useState([]); 
+  // hold the filtered list of Pokemon based on the search
+  const [filteredPokemon, setFilteredPokemon] = useState([]); 
+  // hold error message if fetch fails
+  const [error, setError] = useState(null); 
 
-  // stores any errors 
-  const [error, setError] = useState(null);
-
-  // useEffect to automatically load Pokemon from API without user needing to search
+  // useEffect hook to fetch all Pokemon data when the app loads  
   useEffect(() => {
-    // fetch Pokemon data from the API
+    // function to fetch all Pokemon data from the backend server
     const fetchAllPokemon = async () => {
       try {
-        // fetch the list of the first 151 Pokemon
-        const fetchData = await fetch(API);
-
-        // convert response into JSON so we can manipulate the data
-        const json = await fetchData.json();
-
-        /*  maps over the list of basic Pokemon data, fetches detailed information for each Pokemon, 
-        and returns an array of promises that resolve to the detailed data for all the Pokemon. */
-        const detailedPokemonPromises = json.results.map(async (poke) => {
-          const res = await fetch(poke.url); // Fetch detailed data for each Pokemon
-          return res.json(); // Convert detailed data into JSON format
-        });
-
-        // wait for all detailed pokemon data to be fetched
-        const detailedPokemon = await Promise.all(detailedPokemonPromises);
-
-        // save the detailed pokemon data to the `allPokemon` and `filteredPokemon` state
-        setAllPokemon(detailedPokemon);
-        setFilteredPokemon(detailedPokemon);
+        /*fetch data from backend, parse json response,*/
+        const response = await fetch('http://localhost:3001/pokemon');
+        const data = await response.json();
+        // store full list of pokemon
+        setPokemonList(data);
+        // set filtered pokemon to full list (initially)
+        setFilteredPokemon(data); 
       } catch (err) {
-        // If there's an error during fetching, show a message in the error state
-        console.error(err);
-        setError('Failed to fetch Pokémon data from the API.');
+        console.error('Error fetching Pokemon data:', err);
+        setError('Failed to load Pokemon data. Please try again later.');
       }
     };
 
-    // call the fetch function
+    //call function to fetch all Pokemon data
     fetchAllPokemon();
-  }, []); // Empty dependency array runs only once when the component loads
+  }, []);
 
-  // function to handle changes in the search input field
+  // handle search input changes
   const handleSearchChange = (e) => {
-    // Get the current value of the input field, converted to lowercase (in case user types in caps)
-    const search = e.target.value.toLowerCase();
-    setSearchTerm(search); // Update the searchTerm state with the new input value
-  
-    // Filter the list of Pokemon based on the search term
-    const filtered = allPokemon.filter((pokemon) => {
-      // If the search term matches the Pokemon's ID
-      const idMatch = pokemon.id.toString().includes(search);
-  
-      // If the search term matches the Pokemon's name
-      const nameMatch = pokemon.name.toLowerCase().includes(search);
-  
-      // If the search term matches any of the Pokemon's types
-      const typeMatch = pokemon.types.some((typeObj) =>
-        typeObj.type.name.toLowerCase().includes(search)
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+
+    // filter the pokemon list based on search term
+    const filtered = pokemonList.filter((pokemon) => {
+      const name = pokemon.name?.toLowerCase() || '';
+      const id = pokemon.id?.toString() || '';
+      const types = pokemon.types?.toLowerCase() || '';
+      const abilities = pokemon.abilities?.toLowerCase() || '';
+
+      // check if the search term matches any of the Pokemon's properties
+      return (
+        name.includes(value) ||
+        id.includes(value) ||
+        types.includes(value) ||
+        abilities.includes(value)
       );
-  
-      // If the search term matches any of the Pokemon's abilities
-      const abilityMatch = pokemon.abilities.some((abilityObj) =>
-        abilityObj.ability.name.toLowerCase().includes(search)
-      );
-  
-      // Return true if the search term matches ID, name, type, or ability
-      return idMatch || nameMatch || typeMatch || abilityMatch;
     });
-  
-    // Update the filteredPokemon state with the filtered list
+
+    // update filtered Pokemon list state with the search results
     setFilteredPokemon(filtered);
   };
-  
-
+                          /*UI*/
   return (
-    <>
-      {/* Pokemon logo */}
-      <div className="logo-container">
-        <img src={pokemonLogo} alt="Pokemon Logo" className="pokemon-logo" />
-        <h1 className="slogan">Gotta Store 'Em All!</h1>
-      </div>
-  
-      {/* Main content */}
-      <div>
-        {/* Form with an input field for searching */}
-        <form className="d-flex justify-content-center my-3">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            placeholder="Search by ID, name, type, or ability"
-            className="form-control w-50"
-          />
-        </form>
-  
-        {/* If there's an error, show the error message */}
-        {error && <div>{error}</div>}
-  
-        {/* Display the filtered list of Pokemon */}
-        <div className="pokemon-container">
-          {filteredPokemon.length > 0 ? (
-            filteredPokemon.map((pokemon) => (
-              <Pokemon key={pokemon.id} pokemon={pokemon} />
-            ))
-          ) : (
-               // show the unknown Pokemon image if no results match
-            <div className="text-center">
-              <img
-                src={unknownPokemon}
-                alt="Unknown Pokémon"
-                style={{ width: '200px', margin: '20px' }}
+      <>
+        <div className="logo-container text-center">
+          <img src={pokemonLogo} alt="Pokemon Logo" className="pokemon-logo mb-2" />
+          <h1 className="slogan mb-4">Gotta Store 'Em All!</h1>
+          <form className="d-flex justify-content-center my-3">
+            <div className="input-group w-50">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="form-control"
+                placeholder="Search by ID, name, type, or ability"
               />
-              <p className='h6'>Who's that Pokemon?!</p>
-              <p className='h6'>Pokemon not found in Database</p>
+              <button  style={{ backgroundColor:'#FFFFFF', borderStyle: 'none'}} className="btn btn-primary" type="button" disabled>
+                🔍
+              </button>
             </div>
-          )}
+          </form>
         </div>
-      </div>
-    </>
-  );
   
+        <div>
+          {error && <div>{error}</div>}
+          <div className="pokemon-container">
+            {filteredPokemon.length > 0 ? (
+              // If there are filtered Pokemon, map through them and display each of them using the Pokemon component
+              filteredPokemon.map((pokemon) => (
+                <Pokemon key={pokemon.id} pokemon={pokemon} /> // pass Pokemon data as props to the Pokemon component
+              ))
+            ) : (
+              <div className="text-center">
+                <img
+                  src={unknownPokemon}
+                  alt="Unknown Pokémon"
+                  style={{ width: '200px', margin: '20px' }}
+                />
+                <p className="h6">Who's that Pokemon?!</p>
+                <p className="h6">Pokemon not found in Database</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </>
+    );
   };
   
-  export default App;
+  
+
+export default App;
