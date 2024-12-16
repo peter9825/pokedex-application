@@ -9,7 +9,7 @@ const Pokemon = ({ pokemon }) => {
     // return Pokemon "card" of each Pokemon with it's information (additional styling handled in App.css)
     <div style={{ border: '1px solid #ccc', borderRadius: '10px', padding: '10px', textAlign: 'center' }}>
       <h2 style={{ textTransform: 'capitalize' }}>{name}</h2>
-      <p>ID: {id}</p>
+      <p><strong>ID: </strong>{id} </p>
 
       {/* display the Pokemon sprite */}
       <img
