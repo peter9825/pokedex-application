@@ -16,11 +16,9 @@ const db = new sqlite3.Database(path.join(__dirname, 'pokemon.db'), (err) => {
   else console.log('Connected to the database.');
 });
 
-// fetch Pokemon data based on search input
+// run query to query pokemon data from database
 app.get('/pokemon', (req, res) => {
-  // get the search term from the query parameters, default to an empty string if not provided
-  const search = req.query.search || '';
-   const query = `
+  const query = `
     SELECT pokemon_info.id, 
            pokemon_info.name, 
            pokemon_info.sprite,
@@ -29,17 +27,15 @@ app.get('/pokemon', (req, res) => {
     FROM pokemon_info
     LEFT JOIN pokemon_types ON pokemon_info.id = pokemon_types.id
     LEFT JOIN pokemon_abilities ON pokemon_info.id = pokemon_abilities.id
-    WHERE pokemon_info.name LIKE ? OR pokemon_info.id = ? OR pokemon_types.type LIKE ?
     GROUP BY pokemon_info.id
-  `; 
+  `;
 
-  // run the query with the search term as the parameter, replacing placeholders
-  db.all(query, [`%${search}%`, search, `%${search}%`], (err, rows) => {
+  //sanatize db response (make sure all fields are returned as same type (String))
+  db.all(query, [], (err, rows) => {
     if (err) {
       console.error('Database query error:', err.message);
       res.status(500).json({ error: 'Database query failed' });
     } else {
-      // sanitize the database response (makes sure all fields are returned as strings, even if null)
       const sanitizedRows = rows.map((row) => ({
         id: row.id,
         name: row.name || '',
@@ -48,11 +44,12 @@ app.get('/pokemon', (req, res) => {
         abilities: row.abilities || '',
       }));
 
-      // send the sanitized rows back as a JSON response
+      //send sanatized rows back as JSON response
       res.json(sanitizedRows);
     }
   });
 });
+
 
 // start server
 const PORT = 3001;
