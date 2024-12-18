@@ -47,7 +47,7 @@ db.serialize(() => {
 });
 
 
-// insert Pokemon data into the database
+// Creates 3 query templates that will be ultiized later by .run()
 async function populateDatabase() {
   const insertPokemon = db.prepare(`
     INSERT OR REPLACE INTO pokemon_info (id, name, sprite) VALUES (?, ?, ?)
@@ -68,6 +68,7 @@ async function populateDatabase() {
 
       /*Insert fetched data into following tables*/
 
+      // this information will be used to fill the values for db.prepare statments
       // insert basic info (id, name, sprite) into pokemon_info table
       insertPokemon.run(
         pokemon.id,

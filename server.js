@@ -20,7 +20,7 @@ const db = new sqlite3.Database(path.join(__dirname, 'pokemon.db'), (err) => {
 app.get('/pokemon', (req, res) => {
   // get the search term from the query parameters, default to an empty string if not provided
   const search = req.query.search || '';
-  const query = `
+   const query = `
     SELECT pokemon_info.id, 
            pokemon_info.name, 
            pokemon_info.sprite,
@@ -31,7 +31,7 @@ app.get('/pokemon', (req, res) => {
     LEFT JOIN pokemon_abilities ON pokemon_info.id = pokemon_abilities.id
     WHERE pokemon_info.name LIKE ? OR pokemon_info.id = ? OR pokemon_types.type LIKE ?
     GROUP BY pokemon_info.id
-  `;
+  `; 
 
   // run the query with the search term as the parameter, replacing placeholders
   db.all(query, [`%${search}%`, search, `%${search}%`], (err, rows) => {
