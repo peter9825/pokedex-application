@@ -1,10 +1,12 @@
 Project Overview:
-The Pokémon Database App is a full-stack web application 
+
+This Pokémon Database App is a full-stack web application 
 that allows users to search, view, and explore Pokémon data from a custom SQLite database.
 
 Requirements:
 Npm
 Node.js
+sqlite3
 
 Packages:
 node-fetch
