@@ -6,16 +6,23 @@ that allows users to search, view, and explore Pokémon data from a custom SQLit
 Requirements:
 
 Npm
+
 Node.js
+
 sqlite3
 
 Packages:
 
 node-fetch
+
 path
+
 sqlite3
+
 cors
+
 bootstrap
+
 
 Instructions to run the program: 
 
